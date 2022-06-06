@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:test_otaqu/services/shared_preferences.dart';
 import 'package:test_otaqu/shared/theme.dart';
-import 'package:test_otaqu/ui/home/home_page.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({Key? key}) : super(key: key);
@@ -55,20 +55,12 @@ class IntroPage extends StatelessWidget {
         style: blackTextStyle.copyWith(fontSize: 14.sp, fontWeight: semiBold),
       ),
       onDone: () {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-            (route) => false);
+        SharedPrefService().saveIntro();
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       },
       onSkip: () {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomePage(),
-            ),
-            (route) => false);
+        SharedPrefService().saveIntro();
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       },
       next: Text(
         'Next',

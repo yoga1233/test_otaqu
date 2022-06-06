@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:test_otaqu/services/api_service.dart';
 import 'package:test_otaqu/services/shared_preferences.dart';
 import 'package:test_otaqu/shared/theme.dart';
 import 'package:test_otaqu/ui/home/component/carousel_home.dart';

@@ -1,9 +1,10 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:test_otaqu/services/api_service.dart';
+import 'package:test_otaqu/services/shared_preferences.dart';
 import 'package:test_otaqu/shared/theme.dart';
-import 'package:test_otaqu/ui/intro_page.dart/intro_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -15,14 +16,40 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(
-        const Duration(seconds: 3),
-        () => Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const IntroPage(),
-            ),
-            (route) => false));
+    Timer(const Duration(seconds: 3), () async {
+      String bearer = await SharedPrefService().getToken();
+      bool intro = await SharedPrefService().getIntro();
+      if (bearer != 'null') {
+        bool isExpired = Jwt.isExpired(bearer);
+        if (!isExpired) {
+          if (intro) {
+            if (!mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            if (!mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/intro', (route) => false);
+          }
+        } else {
+          await ApiService().auth();
+          if (intro) {
+            if (!mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+          } else {
+            if (!mounted) return;
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/intro', (route) => false);
+          }
+        }
+      } else {
+        await ApiService().auth();
+        if (!mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
+      }
+    });
+
     super.initState();
   }
 

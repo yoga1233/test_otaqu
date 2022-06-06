@@ -7,12 +7,13 @@ import 'package:test_otaqu/services/shared_preferences.dart';
 class ApiService {
   String baseUrl = 'http://115.85.80.34:4100/';
 
-  Future auth() async {
-    String url = '${baseUrl}utilization/api/auth/login';
-    var body = {
+  Future<String> auth() async {
+    String url = 'http://115.85.80.34/utilization/api/auth/login';
+
+    var body = jsonEncode({
       "username": "otaqu",
       "password": "qwerty",
-    };
+    });
     var header = {
       'Content-Type': 'application/json',
     };
@@ -20,9 +21,21 @@ class ApiService {
       var result = await http.post(Uri.parse(url), body: body, headers: header);
 
       if (result.statusCode == 200) {
-        String data = jsonDecode(result.body)['data']['access_token'];
-        SharedPrefService().setToken(data);
+        var data = jsonDecode(result.body)['data'];
+        var token = data['access_token'];
+        // Map<String, dynamic> payload = Jwt.parseJwt(token);
+
+        // print(payload);
+        // DateTime? expiryDate = Jwt.getExpiryDate(token);
+
+        // print(expiryDate);
+        // bool isExpired = Jwt.isExpired(token);
+        // print(isExpired);
+
+        SharedPrefService().setToken(token);
+        return token;
       }
+      return '';
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -73,10 +86,9 @@ class ApiService {
       if (result.statusCode == 200) {
         var data = jsonDecode(result.body)['data'];
         SharedPrefService().setDestination(data);
-        print(data);
       }
     } catch (e) {
-      print(e);
+      throw Exception(e.toString());
     }
   }
 
