@@ -4,13 +4,13 @@ import '../../shared/theme.dart';
 
 class CustomSearch extends StatelessWidget {
   final String? Function(String?) onSubmit;
-  final Function() onTap;
+  final Function() iconTap;
   final TextEditingController controller;
   const CustomSearch(
       {Key? key,
       required this.onSubmit,
       required this.controller,
-      required this.onTap})
+      required this.iconTap})
       : super(key: key);
 
   @override
@@ -31,7 +31,8 @@ class CustomSearch extends StatelessWidget {
             filled: true,
             hintText: 'Mau Pergi Kemana ?',
             hintStyle: blackTextStyle,
-            suffixIcon: InkWell(onTap: onTap, child: const Icon(Icons.search)),
+            suffixIcon:
+                InkWell(onTap: iconTap, child: const Icon(Icons.search)),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             enabledBorder: OutlineInputBorder(

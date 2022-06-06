@@ -34,7 +34,7 @@ class HeaderHome extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(top: 22.h),
               child: CustomSearch(
-                onTap: () {},
+                iconTap: () {},
                 controller: cSearch,
                 onSubmit: (value) {
                   Navigator.push(

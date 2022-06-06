@@ -24,4 +24,10 @@ class SharedPrefService {
     bool result = await prefs.setString('destination', jsonEncode(destination));
     print('save destination to shared pref $result');
   }
+
+  Future<String> getDestination() async {
+    final pref = await SharedPreferences.getInstance();
+    String? destination = pref.getString('destination');
+    return destination.toString();
+  }
 }

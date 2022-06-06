@@ -60,8 +60,9 @@ class ApiService {
     }
   }
 
-  Future<void> getDestination(String token) async {
+  Future<void> getDestination() async {
     String url = '${baseUrl}destination';
+    String token = await SharedPrefService().getToken();
     var header = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $token'
@@ -76,6 +77,36 @@ class ApiService {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<bool> cekBearer() async {
+    String url = '${baseUrl}avail';
+    String token = await SharedPrefService().getToken();
+    var bodyjson = jsonEncode({
+      "type_source": "location",
+      "type_id": 3,
+      "destination_id": 1,
+      "min_price": 0,
+      "max_price": 10000000000,
+      "page": 1,
+      "order_by": "lowest",
+      "reference": "search"
+    });
+    var header = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token'
+    };
+
+    try {
+      var result =
+          await http.post(Uri.parse(url), body: bodyjson, headers: header);
+      if (result.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } catch (e) {
+      return false;
     }
   }
 }
