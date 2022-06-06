@@ -34,13 +34,13 @@ class HeaderHome extends StatelessWidget {
           Container(
               margin: EdgeInsets.only(top: 22.h),
               child: CustomSearch(
+                onTap: () {},
                 controller: cSearch,
                 onSubmit: (value) {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            SearchPage(query: value.toString()),
+                        builder: (context) => SearchPage(query: cSearch.text),
                       ));
                   return null;
                 },

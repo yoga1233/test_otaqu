@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:test_otaqu/ui/search_page/search_page.dart';
 
 import '../../shared/theme.dart';
 
 class CustomSearch extends StatelessWidget {
   final String? Function(String?) onSubmit;
-  const CustomSearch({Key? key, required this.onSubmit}) : super(key: key);
+  final Function() onTap;
+  final TextEditingController controller;
+  const CustomSearch(
+      {Key? key,
+      required this.onSubmit,
+      required this.controller,
+      required this.onTap})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +23,15 @@ class CustomSearch extends StatelessWidget {
               color: blackColor, offset: const Offset(0, 4), blurRadius: 4)
         ],
       ),
-      child: TextFormField(
-        onFieldSubmitted: onSubmit,
+      child: TextField(
+        onSubmitted: onSubmit,
+        controller: controller,
         decoration: InputDecoration(
             fillColor: Colors.white,
             filled: true,
             hintText: 'Mau Pergi Kemana ?',
             hintStyle: blackTextStyle,
-            suffixIcon: const Icon(Icons.search),
+            suffixIcon: InkWell(onTap: onTap, child: const Icon(Icons.search)),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             enabledBorder: OutlineInputBorder(

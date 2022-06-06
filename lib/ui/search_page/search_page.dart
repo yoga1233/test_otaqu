@@ -17,6 +17,7 @@ class SearchPage extends StatelessWidget {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: CustomSearch(
+          onTap: () {},
           controller: cSearch,
           onSubmit: (value) {},
         ),
