@@ -17,36 +17,74 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     Timer(const Duration(seconds: 3), () async {
+      String dest = await SharedPrefService().getDestination();
       String bearer = await SharedPrefService().getToken();
       bool intro = await SharedPrefService().getIntro();
-      if (bearer != 'null') {
-        bool isExpired = Jwt.isExpired(bearer);
-        if (!isExpired) {
-          if (intro) {
-            if (!mounted) return;
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
-          } else {
-            if (!mounted) return;
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/intro', (route) => false);
+      if (dest != 'null') {
+        if (bearer != 'null') {
+          bool isExpired = Jwt.isExpired(bearer);
+          if (!isExpired) {
+            if (intro) {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
+            } else {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/intro', (route) => false);
+            }
+          } else if (isExpired) {
+            SharedPrefService().deleteToken;
+            await ApiService().auth();
+            if (intro) {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
+            } else {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/intro', (route) => false);
+            }
           }
         } else {
           await ApiService().auth();
-          if (intro) {
-            if (!mounted) return;
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
-          } else {
-            if (!mounted) return;
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/intro', (route) => false);
-          }
+          if (!mounted) return;
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/intro', (route) => false);
         }
       } else {
-        await ApiService().auth();
-        if (!mounted) return;
-        Navigator.pushNamedAndRemoveUntil(context, '/intro', (route) => false);
+        ApiService().auth;
+        ApiService().getDestination();
+        if (bearer != 'null') {
+          bool isExpired = Jwt.isExpired(bearer);
+          if (!isExpired) {
+            if (intro) {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
+            } else {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/intro', (route) => false);
+            }
+          } else if (isExpired) {
+            await ApiService().auth();
+            if (intro) {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/home', (route) => false);
+            } else {
+              if (!mounted) return;
+              Navigator.pushNamedAndRemoveUntil(
+                  context, '/intro', (route) => false);
+            }
+          }
+        } else {
+          await ApiService().auth();
+          if (!mounted) return;
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/intro', (route) => false);
+        }
       }
     });
 

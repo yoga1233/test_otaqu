@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:test_otaqu/ui/search_page/search_page.dart';
-
+import 'package:test_otaqu/services/search_service.dart';
+import 'package:test_otaqu/ui/home/component/typeahead.dart';
 import '../../../shared/theme.dart';
-import '../../widgets/custom_search.dart';
 
 class HeaderHome extends StatelessWidget {
   const HeaderHome({Key? key}) : super(key: key);
@@ -32,19 +31,27 @@ class HeaderHome extends StatelessWidget {
             style: whiteTextStyle.copyWith(fontSize: 16.sp, fontWeight: light),
           ),
           Container(
-              margin: EdgeInsets.only(top: 22.h),
-              child: CustomSearch(
-                iconTap: () {},
-                controller: cSearch,
-                onSubmit: (value) {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SearchPage(query: cSearch.text),
-                      ));
-                  return null;
-                },
-              )),
+            margin: EdgeInsets.only(top: 22.h),
+            child: TypeaHead(
+              controllerText: cSearch,
+              onTap: () async {
+                int id = await SearchService().getId(cSearch.text);
+                print(id);
+              },
+            ),
+            // CustomSearch(
+            //   iconTap: () {},
+            //   controller: cSearch,
+            //   onSubmit: (value) {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //           builder: (context) => SearchPage(query: cSearch.text),
+            //         ));
+            //     return null;
+            //   },
+            // )
+          ),
         ],
       ),
     );

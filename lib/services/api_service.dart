@@ -23,15 +23,6 @@ class ApiService {
       if (result.statusCode == 200) {
         var data = jsonDecode(result.body)['data'];
         var token = data['access_token'];
-        // Map<String, dynamic> payload = Jwt.parseJwt(token);
-
-        // print(payload);
-        // DateTime? expiryDate = Jwt.getExpiryDate(token);
-
-        // print(expiryDate);
-        // bool isExpired = Jwt.isExpired(token);
-        // print(isExpired);
-
         SharedPrefService().setToken(token);
         return token;
       }
@@ -41,8 +32,9 @@ class ApiService {
     }
   }
 
-  Future<List<AvailModel>> getDataAvail(int destinationId, String token) async {
+  Future<List<AvailModel>> getDataAvail(int destinationId) async {
     String url = '${baseUrl}avail';
+    String token = await SharedPrefService().getToken();
     var bodyjson = jsonEncode({
       "type_source": "location",
       "type_id": 3,

@@ -10,7 +10,7 @@ class SharedPrefService {
 
   Future<String> getToken() async {
     final prefs = await SharedPreferences.getInstance();
-    final String token = prefs.getString('token').toString();
+    final String? token = prefs.getString('token');
     return token.toString();
   }
 
@@ -39,7 +39,7 @@ class SharedPrefService {
 
   Future<bool> getIntro() async {
     final pref = await SharedPreferences.getInstance();
-    bool? intro = pref.getBool('intro');
-    return intro!;
+    final bool? des = pref.getBool('intro');
+    return des ?? false;
   }
 }
