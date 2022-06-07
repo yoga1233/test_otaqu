@@ -7,7 +7,12 @@ import '../../../shared/theme.dart';
 class TypeaHead extends StatefulWidget {
   final TextEditingController controllerText;
   final Function() onTap;
-  const TypeaHead({Key? key, required this.onTap, required this.controllerText})
+  final Function(String) onSugesSelect;
+  const TypeaHead(
+      {Key? key,
+      required this.onTap,
+      required this.controllerText,
+      required this.onSugesSelect})
       : super(key: key);
 
   @override
@@ -41,13 +46,7 @@ class _TypeaHeadState extends State<TypeaHead> {
                   hintText: 'Mau Pergi Kemana ?',
                   hintStyle: blackTextStyle,
                   suffixIcon: InkWell(
-                      onTap: widget.onTap,
-                      // if (_formKey.currentState!.validate()) {
-                      //   _formKey.currentState!.save();
-
-                      // }
-
-                      child: const Icon(Icons.search)),
+                      onTap: widget.onTap, child: const Icon(Icons.search)),
                   contentPadding:
                       const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   enabledBorder: OutlineInputBorder(
@@ -65,9 +64,7 @@ class _TypeaHeadState extends State<TypeaHead> {
             transitionBuilder: (context, suggestionsBox, controller) {
               return suggestionsBox;
             },
-            onSuggestionSelected: (String suggestion) {
-              widget.controllerText.text = suggestion;
-            },
+            onSuggestionSelected: widget.onSugesSelect,
             validator: (value) =>
                 value!.isEmpty ? 'Please select a city' : null,
             onSaved: (value) => selectedCity = value,

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:test_otaqu/model/avail_model.dart';
 import 'package:test_otaqu/shared/theme.dart';
 
 class CustomCardAvail extends StatelessWidget {
-  const CustomCardAvail({Key? key}) : super(key: key);
+  final AvailModel avail;
+  const CustomCardAvail(this.avail, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +14,17 @@ class CustomCardAvail extends StatelessWidget {
       height: 100,
       child: Row(
         children: [
-          Container(
-            height: 100.h,
-            width: 100.w,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18), color: greyColor
-                // image: const DecorationImage(
-                //     image: AssetImage('assets/intro1.png'), fit: BoxFit.cover),
-                ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(18),
+            child: Image.network(
+              avail.images![0],
+              errorBuilder: (context, error, stackTrace) => Text(
+                'Image Not Found',
+                style: blackTextStyle,
+              ),
+              width: 100.w,
+              height: 100.h,
+            ),
           ),
           SizedBox(
             width: 11.w,
@@ -30,24 +35,27 @@ class CustomCardAvail extends StatelessWidget {
               SizedBox(
                 height: 4.h,
               ),
-              Text(
-                'Java Jass',
-                style: blackTextStyle.copyWith(
-                  fontSize: 18.sp,
-                  fontWeight: medium,
+              Expanded(
+                child: Text(
+                  avail.name.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: blackTextStyle.copyWith(
+                    fontSize: 18.sp,
+                    fontWeight: medium,
+                  ),
                 ),
               ),
               SizedBox(
                 height: 4.h,
               ),
               Text(
-                'indonesia',
+                avail.day.toString(),
                 style:
                     greyTextStyle.copyWith(fontWeight: light, fontSize: 14.sp),
               ),
               const Spacer(),
               Text(
-                'IDR 1.000.000',
+                'IDR ${avail.price}',
                 style: yellowTextStyle.copyWith(
                     fontSize: 18.sp, fontWeight: medium),
               ),

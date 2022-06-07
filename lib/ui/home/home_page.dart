@@ -34,28 +34,6 @@ class HomePage extends StatelessWidget {
                     HeaderHome(),
                     CarouselHome(),
                     ContentHome(),
-                    // InkWell(
-                    //     onTap: () async {
-                    //       String result =
-                    //           await SharedPrefService().getDestination();
-                    //       List<String> hasil = [];
-                    //       List aku = jsonDecode(result);
-                    //       // print('${aku['name']}');
-                    //       for (var i = 0; i < aku.length; i++) {
-                    //         Map<String, dynamic> agus = aku[i];
-                    //         // print(agus['name']);
-                    //         hasil.add(agus['name']);
-                    //       }
-                    //       print(hasil);
-
-                    //       // ApiService().getDestination(
-                    //       // 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMTUuODUuODAuMzRcL3V0aWxpemF0aW9uXC9hcGlcL2F1dGhcL2xvZ2luIiwiaWF0IjoxNjU0NTIyNTQ0LCJleHAiOjE2NTQ1MjYxNDQsIm5iZiI6MTY1NDUyMjU0NCwianRpIjoiRGszWE1rbVFzU3RnQmp3SCIsInN1YiI6NTYsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.1n4X2yko6InnsPKJ-Bk_wCAdPYEzFgejjXzsq5gNUak');
-                    //     },
-                    //     child: Container(
-                    //       height: 50,
-                    //       width: 50,
-                    //       color: redcolor,
-                    //     )),
                   ],
                 ),
               ],

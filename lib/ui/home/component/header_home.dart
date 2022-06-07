@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_otaqu/services/search_service.dart';
 import 'package:test_otaqu/ui/home/component/typeahead.dart';
+import 'package:test_otaqu/ui/search_page/search_page.dart';
 import '../../../shared/theme.dart';
 
-class HeaderHome extends StatelessWidget {
+class HeaderHome extends StatefulWidget {
   const HeaderHome({Key? key}) : super(key: key);
 
+  @override
+  State<HeaderHome> createState() => _HeaderHomeState();
+}
+
+class _HeaderHomeState extends State<HeaderHome> {
   @override
   Widget build(BuildContext context) {
     TextEditingController cSearch = TextEditingController(text: '');
@@ -33,24 +39,23 @@ class HeaderHome extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: 22.h),
             child: TypeaHead(
+              onSugesSelect: (suggestion) {
+                cSearch.text = suggestion;
+              },
               controllerText: cSearch,
               onTap: () async {
                 int id = await SearchService().getId(cSearch.text);
                 print(id);
+
+                if (!mounted) return;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SearchPage(destinationId: id, query: cSearch.text),
+                    ));
               },
             ),
-            // CustomSearch(
-            //   iconTap: () {},
-            //   controller: cSearch,
-            //   onSubmit: (value) {
-            //     Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //           builder: (context) => SearchPage(query: cSearch.text),
-            //         ));
-            //     return null;
-            //   },
-            // )
           ),
         ],
       ),

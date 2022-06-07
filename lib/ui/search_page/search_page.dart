@@ -1,26 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:jwt_decode/jwt_decode.dart';
+import 'package:test_otaqu/cubit/search_cubit.dart';
+import 'package:test_otaqu/model/avail_model.dart';
+import 'package:test_otaqu/services/data.dart';
 import 'package:test_otaqu/shared/theme.dart';
 import 'package:test_otaqu/ui/widgets/custom_avail_card.dart';
-import 'package:test_otaqu/ui/widgets/custom_search.dart';
 
-class SearchPage extends StatelessWidget {
+import '../../services/api_service.dart';
+import '../../services/search_service.dart';
+import '../../services/shared_preferences.dart';
+import '../home/component/typeahead.dart';
+
+class SearchPage extends StatefulWidget {
   final String query;
+  final int destinationId;
 
-  const SearchPage({Key? key, required this.query}) : super(key: key);
+  const SearchPage({
+    Key? key,
+    required this.destinationId,
+    required this.query,
+  }) : super(key: key);
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  @override
+  void initState() {
+    context.read<SearchCubit>().search(widget.destinationId);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController cSearch = TextEditingController(text: query);
+    TextEditingController cSearch = TextEditingController(text: widget.query);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: CustomSearch(
-          iconTap: () {},
-          controller: cSearch,
-          onSubmit: (value) {
-            return null;
+        title: TypeaHead(
+          controllerText: cSearch,
+          onSugesSelect: (suggestion) async {
+            cSearch.text = suggestion;
+            int id = await SearchService().getId(cSearch.text);
+            if (!mounted) return;
+            context.read<SearchCubit>().search(id);
+          },
+          onTap: () async {
+            int id = await SearchService().getId(cSearch.text);
+            String bearer = await SharedPrefService().getToken();
+            bool isExpired = Jwt.isExpired(bearer);
+            print(isExpired);
+            if (!isExpired) {
+              if (!mounted) return;
+              context.read<SearchCubit>().search(id);
+            } else {
+              SharedPrefService().deleteToken;
+              await ApiService().auth();
+              if (!mounted) return;
+
+              context.read<SearchCubit>().search(id);
+            }
           },
         ),
         centerTitle: true,
@@ -28,18 +71,31 @@ class SearchPage extends StatelessWidget {
         toolbarHeight: 103.h,
       ),
       body: Container(
-        margin: const EdgeInsets.symmetric(
-          horizontal: 24,
-        ),
-        child: ListView(
-          children: [
-            SizedBox(
-              height: 40.h,
-            ),
-            const CustomCardAvail(),
-          ],
-        ),
-      ),
+          margin: const EdgeInsets.symmetric(
+            horizontal: 24,
+          ),
+          child: BlocBuilder<SearchCubit, SearchState>(
+            builder: (context, state) {
+              if (state is SearchSuccess) {
+                return ListView(
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ...state.avail
+                        .map((AvailModel avail) => CustomCardAvail(avail))
+                        .toList()
+                  ],
+                );
+              }
+              return SizedBox(
+                height: 0.5.h,
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+          )),
     );
   }
 }

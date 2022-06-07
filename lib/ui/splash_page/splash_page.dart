@@ -33,7 +33,7 @@ class _SplashPageState extends State<SplashPage> {
               Navigator.pushNamedAndRemoveUntil(
                   context, '/intro', (route) => false);
             }
-          } else if (isExpired) {
+          } else {
             SharedPrefService().deleteToken;
             await ApiService().auth();
             if (intro) {

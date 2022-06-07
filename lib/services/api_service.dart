@@ -76,7 +76,7 @@ class ApiService {
     try {
       final result = await http.get(Uri.parse(url), headers: header);
       if (result.statusCode == 200) {
-        var data = jsonDecode(result.body)['data'];
+        var data = jsonDecode(result.body);
         SharedPrefService().setDestination(data);
       }
     } catch (e) {
