@@ -30,7 +30,7 @@ class HomePage extends StatelessWidget {
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     HeaderHome(),
                     CarouselHome(),
                     ContentHome(),

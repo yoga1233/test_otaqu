@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_otaqu/cubit/last_search_cubit.dart';
 import 'package:test_otaqu/cubit/search_cubit.dart';
 import 'package:test_otaqu/ui/home/home_page.dart';
 import 'package:test_otaqu/ui/intro_page.dart/intro_page.dart';
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => SearchCubit(),
+        ),
+        BlocProvider(
+          create: (context) => LastSearchCubit(),
         )
       ],
       child: ScreenUtilInit(

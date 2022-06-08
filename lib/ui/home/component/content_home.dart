@@ -1,10 +1,29 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:test_otaqu/cubit/last_search_cubit.dart';
+import 'package:test_otaqu/services/shared_preferences.dart';
+import 'package:test_otaqu/ui/widgets/custom_last_search_card.dart';
 
 import '../../../shared/theme.dart';
 
-class ContentHome extends StatelessWidget {
+class ContentHome extends StatefulWidget {
   const ContentHome({Key? key}) : super(key: key);
+
+  @override
+  State<ContentHome> createState() => _ContentHomeState();
+}
+
+class _ContentHomeState extends State<ContentHome> {
+  @override
+  void initState() {
+    context.read<LastSearchCubit>().getLastSearch();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,45 +43,23 @@ class ContentHome extends StatelessWidget {
           SizedBox(
             height: 16.h,
           ),
-          Row(
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                        color: greyColor,
-                        offset: const Offset(6, 6),
-                        blurRadius: 4)
-                  ],
-                ),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    vertical: 8.h,
-                    horizontal: 8.w,
-                  ),
-                  color: Colors.white,
-                  height: 56.h,
-                  width: 143.w,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: 40.h,
-                        width: 40.h,
-                        color: greyColor,
-                      ),
-                      Text(
-                        'Indonesia',
-                        style: blackTextStyle.copyWith(
-                          fontSize: 18.sp,
-                          fontWeight: medium,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )
+              BlocBuilder<LastSearchCubit, LastSearchState>(
+                builder: (context, state) {
+                  if (state is LastSearchSuccess) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ...state.data.map(
+                            (dynamic e) => CustomLastSearchCard(e.toString()))
+                      ],
+                    );
+                  }
+                  return Container();
+                },
+              ),
             ],
           )
         ],
