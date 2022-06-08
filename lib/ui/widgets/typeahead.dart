@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:test_otaqu/services/data.dart';
+import 'package:test_otaqu/services/search_service.dart';
 
-import '../../../shared/theme.dart';
+import '../../shared/theme.dart';
 
 class TypeaHead extends StatefulWidget {
   final TextEditingController controllerText;
@@ -36,7 +36,7 @@ class _TypeaHeadState extends State<TypeaHead> {
         children: [
           TypeAheadFormField(
             suggestionsCallback: (pattern) {
-              return Sugestion.getSuggestions(pattern);
+              return SearchService.getSuggestions(pattern);
             },
             textFieldConfiguration: TextFieldConfiguration(
               controller: widget.controllerText,

@@ -1,10 +1,10 @@
 import 'package:equatable/equatable.dart';
 
 class DestinationModel extends Equatable {
-  final int? destinationId;
-  final String? name;
+  final int destinationId;
+  final String name;
 
-  const DestinationModel({this.destinationId, this.name});
+  const DestinationModel({this.destinationId = 0, this.name = ''});
 
   factory DestinationModel.fromJson(json) => DestinationModel(
         destinationId: json['destination_id'],

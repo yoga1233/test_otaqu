@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:test_otaqu/services/search_service.dart';
-import 'package:test_otaqu/ui/home/component/typeahead.dart';
+import 'package:test_otaqu/ui/widgets/typeahead.dart';
 import 'package:test_otaqu/ui/search_page/search_page.dart';
 import '../../../shared/theme.dart';
 
@@ -45,7 +45,6 @@ class _HeaderHomeState extends State<HeaderHome> {
               controllerText: cSearch,
               onTap: () async {
                 int id = await SearchService().getId(cSearch.text);
-                print(id);
 
                 if (!mounted) return;
                 Navigator.push(

@@ -4,14 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:test_otaqu/cubit/search_cubit.dart';
 import 'package:test_otaqu/model/avail_model.dart';
-import 'package:test_otaqu/services/data.dart';
 import 'package:test_otaqu/shared/theme.dart';
 import 'package:test_otaqu/ui/widgets/custom_avail_card.dart';
 
 import '../../services/api_service.dart';
 import '../../services/search_service.dart';
 import '../../services/shared_preferences.dart';
-import '../home/component/typeahead.dart';
+import '../widgets/typeahead.dart';
 
 class SearchPage extends StatefulWidget {
   final String query;
@@ -51,6 +50,7 @@ class _SearchPageState extends State<SearchPage> {
           },
           onTap: () async {
             int id = await SearchService().getId(cSearch.text);
+            print(id);
             String bearer = await SharedPrefService().getToken();
             bool isExpired = Jwt.isExpired(bearer);
             print(isExpired);
@@ -87,12 +87,13 @@ class _SearchPageState extends State<SearchPage> {
                         .toList()
                   ],
                 );
+              } else if (state is SearchFailed) {
+                return Center(
+                  child: Text('Data Not Found!'),
+                );
               }
-              return SizedBox(
-                height: 0.5.h,
-                child: const Center(
-                  child: CircularProgressIndicator(),
-                ),
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             },
           )),

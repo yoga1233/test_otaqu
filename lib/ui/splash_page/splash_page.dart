@@ -53,8 +53,8 @@ class _SplashPageState extends State<SplashPage> {
               context, '/intro', (route) => false);
         }
       } else {
-        ApiService().auth;
-        ApiService().getDestination();
+        await ApiService().auth();
+        await ApiService().getDestination();
         if (bearer != 'null') {
           bool isExpired = Jwt.isExpired(bearer);
           if (!isExpired) {
