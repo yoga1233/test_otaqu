@@ -42,4 +42,15 @@ class SharedPrefService {
     final bool? des = pref.getBool('intro');
     return des ?? false;
   }
+
+  void setLastSearch(List<String> search) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('search', jsonEncode(search));
+  }
+
+  Future getLastSearch() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? lastSearch = prefs.getString('search');
+    return lastSearch.toString();
+  }
 }

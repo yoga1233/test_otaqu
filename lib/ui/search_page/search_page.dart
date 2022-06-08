@@ -88,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
                   ],
                 );
               } else if (state is SearchFailed) {
-                return Center(
+                return const Center(
                   child: Text('Data Not Found!'),
                 );
               }
